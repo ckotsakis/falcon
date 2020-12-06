@@ -15,6 +15,7 @@ public class UploadService implements IUploadService {
 
         byte[] bytes = dataFile.getBytes();
         Path path = Paths.get(folder + dataFile.getOriginalFilename());
+        //Write the file locally so we can read it into a database
         Files.write(path, bytes);
 
     }
