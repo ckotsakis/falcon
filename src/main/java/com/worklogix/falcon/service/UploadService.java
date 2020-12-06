@@ -11,7 +11,7 @@ public class UploadService implements IUploadService {
 
     @Override
     public void saveDataFile(MultipartFile dataFile) throws IOException {
-        String folder = "/Users/ckotsakis/Desktop/";
+        String folder = System.getProperty("user.home") + "/Downloads/";
 
         byte[] bytes = dataFile.getBytes();
         Path path = Paths.get(folder + dataFile.getOriginalFilename());

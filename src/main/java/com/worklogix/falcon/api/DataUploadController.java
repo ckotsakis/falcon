@@ -17,6 +17,8 @@ public class DataUploadController {
 
         System.out.println("We got a post!");
 
+        System.out.println(System.getProperty("user.home"));
+
         try {
             UploadService upload = new UploadService();
             upload.saveDataFile(dataFile);
