@@ -24,7 +24,8 @@ public class DataImport implements DataDao {
             columnNames = line.split(",");
             System.out.println(line + " (length = " + columnNames.length + ")");
 
-            MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
+            //MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
+            MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
             MongoDatabase database = mongoClient.getDatabase("staging");
             MongoCollection<Document> collection = database.getCollection(tableName);
             String[] row;
