@@ -2,14 +2,13 @@ package com.worklogix.falcon.api;
 
 import com.worklogix.falcon.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @RestController
+@RequestMapping("/dataUpload")
 public class DataUploadController {
 
     private final UploadService uploadService;
@@ -19,7 +18,7 @@ public class DataUploadController {
         this.uploadService = uploadService;
     }
 
-    @PostMapping("/dataUpload")
+    @PostMapping
     public String dataUpload(@RequestParam("dataFile") MultipartFile dataFile, @RequestParam("tablename") String tablename) {
         String returnValue = "start";
 
@@ -37,5 +36,13 @@ public class DataUploadController {
 
         return returnValue;
     }
+
+    @GetMapping
+    public String getData(@RequestParam("tablename") String tablename){
+        return uploadService.getData(tablename);
+
+    }
+
+
 
 }

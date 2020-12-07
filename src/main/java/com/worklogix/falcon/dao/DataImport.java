@@ -20,6 +20,7 @@ public class DataImport implements DataDao {
         String line;
         String[] columnNames;
 
+
         if((line = input.readLine()) != null) {
             columnNames = line.split(",");
             System.out.println(line + " (length = " + columnNames.length + ")");
@@ -29,6 +30,8 @@ public class DataImport implements DataDao {
             MongoDatabase database = mongoClient.getDatabase("staging");
             MongoCollection<Document> collection = database.getCollection(tableName);
             String[] row;
+
+
 
             while ((line = input.readLine()) != null) {
                 Document doc = new Document();
@@ -51,5 +54,55 @@ public class DataImport implements DataDao {
             }
         }
     }
+
+    @Override
+    public String getData(String tableName) {
+
+        String resultset = "";
+
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase database = mongoClient.getDatabase("staging");
+        MongoCollection<Document> collection = database.getCollection(tableName);
+
+        if (tableName.length() > 0) {
+            //Document myDoc = collection.find();
+            StringBuilder items = new StringBuilder();
+
+            MongoCursor<Document> cursor = collection.find().limit(5).iterator();
+            while (cursor.hasNext()) {
+                items.append(cursor.next().toJson());
+                if (cursor.hasNext()) {
+                    items.append(",");
+                }
+            }
+
+            resultset = "[" + items.toString() + "]";
+            //resultset = items.toString();
+
+        } else {
+
+            StringBuilder items = new StringBuilder();
+            MongoCursor<Document> cursor = collection.find().iterator();
+
+            while (cursor.hasNext()) {
+                items.append(cursor.next().toJson());
+                if (cursor.hasNext()) {
+                    items.append(",");
+                }
+            }
+            //resultset = "[" + items.toString() + "]";
+            resultset = items.toString();
+
+            cursor.close();
+
+        }
+
+        mongoClient.close();
+        System.out.println(resultset);
+
+        return resultset;
+
+    }
+
 
 }

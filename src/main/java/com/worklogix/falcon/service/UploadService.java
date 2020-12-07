@@ -32,4 +32,10 @@ public class UploadService {
 
 
     }
+
+    public String getData(String tableName){
+        String resultSet = "";
+        resultSet = dataDao.getData(tableName);
+        return resultSet;
+    }
 }
