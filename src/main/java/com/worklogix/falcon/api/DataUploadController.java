@@ -1,6 +1,7 @@
 package com.worklogix.falcon.api;
 
 import com.worklogix.falcon.service.UploadService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,13 @@ import java.io.IOException;
 @RestController
 public class DataUploadController {
 
+    private final UploadService uploadService;
+
+    @Autowired
+    public DataUploadController(UploadService uploadService){
+        this.uploadService = uploadService;
+    }
+
     @PostMapping("/dataUpload")
     public String dataUpload(@RequestParam("dataFile") MultipartFile dataFile) {
         String returnValue = "start";
@@ -20,8 +28,7 @@ public class DataUploadController {
         System.out.println(System.getProperty("user.home"));
 
         try {
-            UploadService upload = new UploadService();
-            upload.saveDataFile(dataFile);
+            uploadService.saveDataFile(dataFile);
         } catch (IOException e) {
             e.printStackTrace();
             returnValue = "error";
