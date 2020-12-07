@@ -17,7 +17,7 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
 
             <h3>Data File Upload</h3>
 
@@ -52,11 +52,16 @@
         //$('[data-rel=tooltip]').tooltip();
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
-        var table = $("#datatab").DataTable();
+        //var table = $("#datatab").DataTable({});
 
     });
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     function browseData() {
+
 
         //let data = new FormData($("#formBrowse")[0]);
 
@@ -80,17 +85,22 @@
 
                 //Traverse the objects and create the columns and then add each row to the table
                 let columns = [];
-                let columnNames = Object.keys(result[0]);
-                for(let i = 0; i < result.length; i++) {
-                    columns.push({data:columnNames[i]});
-                }
-                $('#datatab').DataTable({
-                    data: result.data,
-                    columns: columns
-                    });
 
+                let columnNames = Object.keys(result[0]);
+                console.log(columnNames.length);
+
+                for(let i = 0; i < columnNames.length; i++) {
+                    columns.push({data:columnNames[i],title:capitalizeFirstLetter(columnNames[i])});
+                    console.log(columnNames[i]);
+                }
+
+                let table = $('#datatab').DataTable({
+                    data: result,
+                    columns: columns
+                });
 
             }
+
         });
 
     }

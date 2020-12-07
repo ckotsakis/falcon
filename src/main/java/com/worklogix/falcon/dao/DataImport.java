@@ -25,8 +25,8 @@ public class DataImport implements DataDao {
             columnNames = line.split(",");
             System.out.println(line + " (length = " + columnNames.length + ")");
 
-            //MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
-            MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+            MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
+            //MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
             MongoDatabase database = mongoClient.getDatabase("staging");
             MongoCollection<Document> collection = database.getCollection(tableName);
             String[] row;
@@ -60,7 +60,8 @@ public class DataImport implements DataDao {
 
         String resultset = "";
 
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
+        //MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
         MongoDatabase database = mongoClient.getDatabase("staging");
         MongoCollection<Document> collection = database.getCollection(tableName);
 
@@ -68,7 +69,7 @@ public class DataImport implements DataDao {
             //Document myDoc = collection.find();
             StringBuilder items = new StringBuilder();
 
-            MongoCursor<Document> cursor = collection.find().limit(5).iterator();
+            MongoCursor<Document> cursor = collection.find().iterator();
             while (cursor.hasNext()) {
                 items.append(cursor.next().toJson());
                 if (cursor.hasNext()) {
