@@ -13,6 +13,12 @@ public class DataImport implements DataDao{
     public void importData(String fileName) throws IOException {
         BufferedReader input = new BufferedReader(new FileReader(fileName));
         String line;
+        String[] columnNames;
+
+        if((line = input.readLine()) != null) {
+            columnNames = line.split(",");
+            System.out.println(line + " (length = " + columnNames.length + ")");
+        }
 
         while ((line = input.readLine()) != null){
             System.out.println(line);
