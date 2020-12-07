@@ -20,15 +20,16 @@ public class DataUploadController {
     }
 
     @PostMapping("/dataUpload")
-    public String dataUpload(@RequestParam("dataFile") MultipartFile dataFile) {
+    public String dataUpload(@RequestParam("dataFile") MultipartFile dataFile, @RequestParam("tablename") String tablename) {
         String returnValue = "start";
 
-        System.out.println("We got a post!");
+        //System.out.println("We got a post!");
+        //System.out.println(System.getProperty("user.home"));
 
-        System.out.println(System.getProperty("user.home"));
+        System.out.println(tablename);
 
         try {
-            uploadService.saveDataFile(dataFile);
+            uploadService.saveDataFile(dataFile, tablename);
         } catch (IOException e) {
             e.printStackTrace();
             returnValue = "error";

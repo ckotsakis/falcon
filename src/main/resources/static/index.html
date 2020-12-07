@@ -10,12 +10,36 @@
 </head>
 <body>
 
-<h3>Data File Upload</h3>
 
-<form method="post" enctype="multipart/form-data" action="/dataUpload">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+
+            <h3>Data File Upload</h3>
+
+            <form method="post" enctype="multipart/form-data" action="/dataUpload">
+                <div class="form-group">
+                    <label for="tablename">Table Name</label>
+                    <input type="text" class="form-control" id="tablename" name="tablename" aria-describedby="emailHelp">
+                    <small id="emailHelp" class="form-text text-muted">Enter the name of the table you would like to create</small>
+                </div>
+                <div class="form-group">
+                    <label for="dataFile">Select File for Upload</label>
+                    <input type="file" class="form-control-file" id="dataFile" name="dataFile">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div> <!-- End of the Col -->
+    </div>
+</div>
+
+
+<!--form method="post" enctype="multipart/form-data" action="/dataUpload">
     <input type="file" name="dataFile"/>
     <input type="submit" value="Upload" class="btn btn-primary"/>
-</form>
+</form-->
 
 </body>
 </html>

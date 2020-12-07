@@ -21,14 +21,14 @@ public class UploadService {
         this.dataDao = dataDao;
     }
 
-    public void saveDataFile(MultipartFile dataFile) throws IOException {
+    public void saveDataFile(MultipartFile dataFile, String tableName) throws IOException {
         String folder = System.getProperty("user.home") + "/Downloads/";
 
         byte[] bytes = dataFile.getBytes();
         Path path = Paths.get(folder + dataFile.getOriginalFilename());
         //Write the file locally so we can read it into a database
         Files.write(path, bytes);
-        dataDao.importData(folder.concat(dataFile.getOriginalFilename()));
+        dataDao.importData(folder.concat(dataFile.getOriginalFilename()),tableName);
 
 
     }
