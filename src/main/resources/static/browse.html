@@ -7,6 +7,12 @@
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
     <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="assets/DataTables/datatables.min.css" >
+    <script src="assets/DataTables/datatables.min.js"></script>
+
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" >
+    <script src="assets/fontawesome/js/fontawesome.min.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -29,6 +35,10 @@
 
             <pre id="test">test</pre>
 
+            <table class="table" id="datatab">
+
+            </table>
+
 
 
         </div> <!-- End of the Col -->
@@ -42,7 +52,7 @@
         //$('[data-rel=tooltip]').tooltip();
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
-
+        var table = $("#datatab").DataTable();
 
     });
 
@@ -64,9 +74,22 @@
             method: 'GET',
             dataType: "json",
             success: function(result){
-                let data = JSON.stringify(result);
-                console.log(result);
-                $("#test").text(data);
+                //let data = JSON.stringify(result);
+                //console.log(result);
+                //$("#test").text(data);
+
+                //Traverse the objects and create the columns and then add each row to the table
+                let columns = [];
+                let columnNames = Object.keys(result[0]);
+                for(let i = 0; i < result.length; i++) {
+                    columns.push({data:columnNames[i]});
+                }
+                $('#datatab').DataTable({
+                    data: result.data,
+                    columns: columns
+                    });
+
+
             }
         });
 
