@@ -19,7 +19,7 @@
 
             <!--form method="post" enctype="multipart/form-data" action="/dataUpload"-->
 
-            <form>
+            <form id="formUpload">
                 <div class="form-group">
                     <label for="tablename">Table Name</label>
                     <input type="text" class="form-control" id="tablename" name="tablename" aria-describedby="emailHelp">
@@ -39,7 +39,7 @@
 
 
 <script type="text/javascript">
-    jQuery(function($) {
+    $(document).ready(function(){
 
         //$('[data-rel=tooltip]').tooltip();
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
@@ -49,7 +49,27 @@
     });
 
     function postData() {
-        alert("We called the function!")
+
+        let data = new FormData($("#formUpload")[0]);
+
+        //jQuery.each(jQuery('#dataFile')[0].files, function(i, file) {
+        //    data.append('file-'+i, file);
+        //});
+        //data.append("dataFile",jQuery('#dataFile')[0].files);
+        //data.append("tablename","testubg");
+
+        jQuery.ajax({
+            url: '/dataUpload',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            success: function(data){
+                alert(data);
+            }
+        });
+
     }
 
 </script>
