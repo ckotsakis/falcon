@@ -17,7 +17,9 @@
 
             <h3>Data File Upload</h3>
 
-            <form method="post" enctype="multipart/form-data" action="/dataUpload">
+            <!--form method="post" enctype="multipart/form-data" action="/dataUpload"-->
+
+            <form>
                 <div class="form-group">
                     <label for="tablename">Table Name</label>
                     <input type="text" class="form-control" id="tablename" name="tablename" aria-describedby="emailHelp">
@@ -28,7 +30,7 @@
                     <input type="file" class="form-control-file" id="dataFile" name="dataFile">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="postData()">Submit</button>
             </form>
 
         </div> <!-- End of the Col -->
@@ -45,6 +47,10 @@
         alert("Hi Nick!");
 
     });
+
+    function postData() {
+        alert("We called the function!")
+    }
 
 </script>
 
