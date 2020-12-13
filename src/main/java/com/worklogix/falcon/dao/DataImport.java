@@ -14,7 +14,7 @@ import java.io.IOException;
 public class DataImport implements DataDao {
 
     @Override
-    public void importData(String fileName,String tableName) throws IOException {
+    public void importData(String fileName,String tableName, String desc) throws IOException {
 
         BufferedReader input = new BufferedReader(new FileReader(fileName));
         String line;
@@ -22,22 +22,29 @@ public class DataImport implements DataDao {
 
 
         if((line = input.readLine()) != null) {
-            columnNames = line.split(",");
+            columnNames = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
             System.out.println(line + " (length = " + columnNames.length + ")");
 
             MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
             //MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
             MongoDatabase database = mongoClient.getDatabase("staging");
-            MongoCollection<Document> collection = database.getCollection(tableName);
+
+            //Save data to folders
+            MongoCollection<Document> collection = database.getCollection("folder");
+            Document doc = new Document(columnNames[0], tableName);
+            doc.append("description", desc);
+            collection.insertOne(doc);
+
+            // Load data into table
+            collection = database.getCollection(tableName);
+
             String[] row;
 
-
-
             while ((line = input.readLine()) != null) {
-                Document doc = new Document();
+                doc = new Document();
                 row = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
                 for (int col = 0; col < row.length; col++) {
-                    doc.append(columnNames[col], row[col]);
+                    doc.append(columnNames[col], row[col].replace("\"",""));
                 }
                 collection.insertOne(doc);
 

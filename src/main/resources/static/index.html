@@ -19,18 +19,34 @@
 
             <!--form method="post" enctype="multipart/form-data" action="/dataUpload"-->
 
-            <form id="formUpload">
+            <form id="formUpload" class="needs-validation" novalidate>
                 <div class="form-group">
                     <label for="tablename">Table Name</label>
-                    <input type="text" class="form-control" id="tablename" name="tablename" aria-describedby="emailHelp">
-                    <small id="emailHelp" class="form-text text-muted">Enter the name of the table you would like to create</small>
+                    <input type="text" class="form-control invalid" id="tablename" name="tablename" aria-describedby="tabname_help" required>
+                    <small id="tabname_help" class="form-text text-muted">Enter the name of the table you would like to create</small>
+                    <div class="invalid-feedback">
+                        Please enter a valid Table Name
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="desc">Table Description</label>
+                    <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+                    <small id="desc_help" class="form-text text-muted">Enter a table description</small>
+                    <div class="invalid-feedback">
+                        Please enter a brief description of the Table
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="dataFile">Select File for Upload</label>
-                    <input type="file" class="form-control-file" id="dataFile" name="dataFile">
+                    <input type="file" class="form-control-file" id="dataFile" name="dataFile" required>
+                    <div class="invalid-feedback">
+                        Please select a file
+                    </div>
                 </div>
 
-                <button type="button" class="btn btn-primary" onclick="postData()">Submit</button>
+                <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
+                <!--button type="submit" class="btn btn-primary" onclick="postData()">Submit</button-->
+
             </form>
 
         </div> <!-- End of the Col -->
@@ -39,12 +55,31 @@
 
 
 <script type="text/javascript">
+
+
+
     $(document).ready(function(){
 
         //$('[data-rel=tooltip]').tooltip();
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
-        alert("Hi Nick!");
+
+        $("#btnSubmit").click(function(event) {
+
+            // Fetch form to apply custom Bootstrap validation
+            let form = $("#formUpload")
+
+            if (form[0].checkValidity() === false) {
+                event.preventDefault()
+                event.stopPropagation()
+            } else {
+               postData();
+            }
+
+            form.addClass('was-validated');
+
+        });
+
 
     });
 
