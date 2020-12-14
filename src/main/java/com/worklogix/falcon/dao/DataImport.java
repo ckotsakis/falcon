@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 
 import com.mongodb.client.*;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,6 +11,8 @@ import java.io.IOException;
 
 @Repository("mongoDao")
 public class DataImport implements DataDao {
+    private String database = "mongodb://192.168.1.34:27017";
+    //private String collectionName = "mongodb://localhost:27017";
 
     @Override
     public void importData(String fileName,String tableName, String desc) throws IOException {
@@ -25,8 +26,7 @@ public class DataImport implements DataDao {
             columnNames = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
             System.out.println(line + " (length = " + columnNames.length + ")");
 
-            MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
-            //MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+            MongoClient mongoClient = MongoClients.create(database);
             MongoDatabase database = mongoClient.getDatabase("staging");
 
             //Save data to folders
@@ -58,6 +58,7 @@ public class DataImport implements DataDao {
             */
 
                 System.out.println(line);
+                mongoClient.close();
             }
         }
     }
@@ -67,8 +68,7 @@ public class DataImport implements DataDao {
 
         String resultset = "";
 
-        MongoClient mongoClient = MongoClients.create("mongodb://192.168.1.34:27017");
-        //MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
         MongoCollection<Document> collection = database.getCollection(tableName);
 
@@ -86,22 +86,6 @@ public class DataImport implements DataDao {
 
             resultset = "[" + items.toString() + "]";
             //resultset = items.toString();
-
-        } else {
-
-            StringBuilder items = new StringBuilder();
-            MongoCursor<Document> cursor = collection.find().iterator();
-
-            while (cursor.hasNext()) {
-                items.append(cursor.next().toJson());
-                if (cursor.hasNext()) {
-                    items.append(",");
-                }
-            }
-            //resultset = "[" + items.toString() + "]";
-            resultset = items.toString();
-
-            cursor.close();
 
         }
 
