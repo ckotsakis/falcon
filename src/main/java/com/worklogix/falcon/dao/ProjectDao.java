@@ -18,7 +18,7 @@ public class ProjectDao {
     private String database = "mongodb://192.168.1.34:27017";
 
     public void createProject(String projectName,String projectDescription) throws IOException {
-        String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+        final String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
 
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
@@ -39,7 +39,11 @@ public class ProjectDao {
 
     public void addData(String name, String description){
         final String uuid = UUID.randomUUID().toString();
-        String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+        final String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+
+        MongoClient mongoClient = MongoClients.create(database);
+        MongoDatabase database = mongoClient.getDatabase("staging");
+
 
     }
 
