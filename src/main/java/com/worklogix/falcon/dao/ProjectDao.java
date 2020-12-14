@@ -4,7 +4,10 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -28,7 +31,7 @@ public class ProjectDao {
         Document doc = new Document("name", projectName);
         doc.append("description", projectDescription);
         doc.append("createdon", today);
-        doc.append("data", "");
+        doc.append("data", new Document());
 
         collection.insertOne(doc);
 
@@ -37,14 +40,32 @@ public class ProjectDao {
 
     }
 
-    public void addData(String name, String description){
+    public void addData(String id, String name, String description, String fileName) throws IOException{
         final String uuid = UUID.randomUUID().toString();
         final String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
 
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
 
+        MongoCollection<Document> collection = database.getCollection("projects");
 
+        Bson filter = new Document("_id", new ObjectId(id));
+
+        //uuid, name, description, fileName
+
+        //String value = String.format("{\"id\":\"%s\",\"name\":\"%s\",\"description\":\"%s\",\"fileName\":\"%s\",\"today\":\"%s\"}",uuid,name,description,fileName, today);
+
+        Document doc = new Document("id", uuid);
+        doc.append("name", name);
+        doc.append("description", description);
+        doc.append("filename", fileName);
+        doc.append("uploaded",today);
+
+        //Bson newValue = new Document("data", doc);
+
+        //Bson updateOperationDocument = new Document("$set", newValue);
+        collection.updateOne(filter, Updates.addToSet("data", doc));
+        mongoClient.close();
     }
 
 }

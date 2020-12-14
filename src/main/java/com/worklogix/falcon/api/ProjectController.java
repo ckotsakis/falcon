@@ -23,7 +23,8 @@ public class ProjectController {
     public void createProject(@RequestParam("projectName") String projectName,
                               @RequestParam("projectDesc") String projectDescription){
         try {
-            projectService.createProject(projectName, projectDescription);
+            //projectService.createProject(projectName, projectDescription);
+            projectService.addData("5fd6a3ad8120df4666ddc7a2", "Anything", "Describing anything", "home/downloads/fakefile");
         } catch (IOException e) {
             e.printStackTrace();
         }

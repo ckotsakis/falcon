@@ -20,4 +20,8 @@ public class ProjectService implements IProjectService {
     public void createProject(String projectName, String projectDescription) throws IOException {
         projectDao.createProject(projectName, projectDescription);
     }
+
+    public void addData(String id, String name, String description, String fileName) throws  IOException{
+        projectDao.addData(id, name, description, fileName);
+    }
 }
