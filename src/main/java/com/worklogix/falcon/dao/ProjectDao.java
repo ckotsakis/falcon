@@ -1,9 +1,8 @@
 package com.worklogix.falcon.dao;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -12,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.UUID;
 
 @Repository
@@ -66,6 +67,29 @@ public class ProjectDao {
         //Bson updateOperationDocument = new Document("$set", newValue);
         collection.updateOne(filter, Updates.addToSet("data", doc));
         mongoClient.close();
+    }
+
+    public void removeData(String id, String uuid){
+        MongoClient mongoClient = MongoClients.create(database);
+        MongoDatabase database = mongoClient.getDatabase("staging");
+
+        MongoCollection<Document> collection = database.getCollection("projects");
+
+        Bson filter = new Document("_id", new ObjectId(id));
+
+        ArrayList<?> doc = collection.find(filter).first().get("data", ArrayList.class);
+        Document delete;
+
+        for(int i = 0; i < doc.size(); i++){
+            if(doc.get(i).toString().contains(uuid)){
+                delete = (Document) doc.get(i);
+                collection.updateOne(filter, Updates.pull("data", delete));
+                break;
+            }
+        }
+
+
+
     }
 
 }

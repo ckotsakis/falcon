@@ -24,4 +24,8 @@ public class ProjectService implements IProjectService {
     public void addData(String id, String name, String description, String fileName) throws  IOException{
         projectDao.addData(id, name, description, fileName);
     }
+
+    public void removeData(String id, String uuid) throws  IOException{
+        projectDao.removeData(id, uuid);
+    }
 }
