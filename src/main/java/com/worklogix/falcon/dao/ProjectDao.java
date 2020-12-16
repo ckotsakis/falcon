@@ -58,6 +58,7 @@ public class ProjectDao {
         //String strID = (String) idObj.get("$oid");
 
         while (cursor.hasNext()) {
+
             items.append(cursor.next().toJson());
             if (cursor.hasNext()) {
                 items.append(",");
@@ -69,6 +70,8 @@ public class ProjectDao {
         mongoClient.close();
         return resultset;
     }
+
+
 
     public void addData(String id, String name, String description, String fileName) throws IOException{
         final String uuid = UUID.randomUUID().toString();
