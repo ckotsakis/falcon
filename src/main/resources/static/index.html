@@ -20,6 +20,12 @@
             <!--form method="post" enctype="multipart/form-data" action="/dataUpload"-->
 
             <form id="formUpload" class="needs-validation" novalidate>
+
+                <div class="form-group">
+                    <label for="project">Select a Project</label>
+                    <select class="form-control" id="project">
+                    </select>
+                </div>
                 <div class="form-group">
                     <label for="tablename">Table Name</label>
                     <input type="text" class="form-control invalid" id="tablename" name="tablename" aria-describedby="tabname_help" required>
@@ -79,6 +85,8 @@
             form.addClass('was-validated');
 
         });
+
+
 
 
     });
