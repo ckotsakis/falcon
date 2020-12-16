@@ -54,6 +54,9 @@ public class ProjectDao {
 
         MongoCursor<Document> cursor = collection.find().projection(Projections.exclude("data")).iterator();
 
+        //JSONObject idObj = (JSONObject)obj.get("_id");
+        //String strID = (String) idObj.get("$oid");
+
         while (cursor.hasNext()) {
             items.append(cursor.next().toJson());
             if (cursor.hasNext()) {
