@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Falcon Projects</title>
     <script src="assets/js/jquery.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
@@ -21,12 +21,13 @@
             <br>
             <h3>Projects</h3>
 
-            <button type="button" class="btn btn-primary" onclick="createProject()">Create Project</button>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='index.html';">Create Project</button>
 
             <hr>
 
             <table id="tabprojects" class="table">
             </table>
+
 
 
         </div> <!-- End of the Col -->
@@ -68,7 +69,17 @@
 
                 let table = $('#tabprojects').DataTable({
                     data: result,
-                    columns: columns
+                    columns: [
+                        {"data": "_id", "name": "_id"},
+                        { "data": "name", "name": "Project",
+                            fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                                if(oData.name) {
+                                    $(nTd).html("<a href='/projects/" + oData._id + "'>"+oData.name+"</a>");
+                                }
+                            }
+                        },
+                        { "data": "description", "name": "Description" },
+                    ]
                 });
 
             }
