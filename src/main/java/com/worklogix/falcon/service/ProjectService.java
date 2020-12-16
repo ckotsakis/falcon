@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+//TODO fix the interface
 @Service
 public class ProjectService implements IProjectService {
 
@@ -21,6 +22,10 @@ public class ProjectService implements IProjectService {
         projectDao.createProject(projectName, projectDescription);
     }
 
+    public String getProjects(String id){
+        return projectDao.getProjects(id);
+    }
+
     public void addData(String id, String name, String description, String fileName) throws  IOException{
         projectDao.addData(id, name, description, fileName);
     }
@@ -28,4 +33,6 @@ public class ProjectService implements IProjectService {
     public void removeData(String id, String uuid) throws  IOException{
         projectDao.removeData(id, uuid);
     }
+
+
 }

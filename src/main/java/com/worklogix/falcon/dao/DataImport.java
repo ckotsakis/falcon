@@ -50,7 +50,6 @@ public class DataImport implements DataDao {
                 }
                 collection.insertOne(doc);
 
-
                 System.out.println(line);
             }
             projectDao.addData(id, tableName, desc, fileName);
@@ -89,6 +88,16 @@ public class DataImport implements DataDao {
 
         return resultset;
 
+    }
+
+    @Override
+    public void deleteData(String tableName) {
+        MongoClient mongoClient = MongoClients.create(database);
+        MongoDatabase database = mongoClient.getDatabase("staging");
+        MongoCollection<Document> collection = database.getCollection(tableName);
+
+        collection.drop();
+        mongoClient.close();
     }
 
 }

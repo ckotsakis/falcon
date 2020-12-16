@@ -20,6 +20,7 @@ import java.util.UUID;
 public class ProjectDao {
 
     private String database = "mongodb://192.168.1.34:27017";
+    DataImport dataImport = new DataImport();
 
     public void createProject(String projectName,String projectDescription) throws IOException {
         final String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
@@ -39,6 +40,31 @@ public class ProjectDao {
         System.out.println("Inserted");
         mongoClient.close();
 
+    }
+
+    public String getProjects(String id) {
+
+        MongoClient mongoClient = MongoClients.create(database);
+        MongoDatabase database = mongoClient.getDatabase("staging");
+
+        MongoCollection<Document> collection = database.getCollection("projects");
+
+        String resultset = "";
+        StringBuilder items = new StringBuilder();
+
+        MongoCursor<Document> cursor = collection.find().projection(Projections.exclude("data")).iterator();
+
+        while (cursor.hasNext()) {
+            items.append(cursor.next().toJson());
+            if (cursor.hasNext()) {
+                items.append(",");
+            }
+        }
+
+        resultset = "[" + items.toString() + "]";
+        System.out.println(resultset);
+        mongoClient.close();
+        return resultset;
     }
 
     public void addData(String id, String name, String description, String fileName) throws IOException{
@@ -80,10 +106,12 @@ public class ProjectDao {
         ArrayList<?> doc = collection.find(filter).first().get("data", ArrayList.class);
         Document delete;
 
-        for(int i = 0; i < doc.size(); i++){
-            if(doc.get(i).toString().contains(uuid)){
-                delete = (Document) doc.get(i);
+        for (Object o : doc) {
+            if (o.toString().contains(uuid)) {
+                delete = (Document) o;
                 collection.updateOne(filter, Updates.pull("data", delete));
+                String name = (String) collection.find(filter).first().get("name");
+                dataImport.deleteData(name);
                 break;
             }
         }

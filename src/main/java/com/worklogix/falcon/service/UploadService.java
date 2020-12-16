@@ -38,4 +38,8 @@ public class UploadService {
         resultSet = dataDao.getData(tableName);
         return resultSet;
     }
+
+    public void deleteData(String tableName){
+        dataDao.deleteData(tableName);
+    }
 }

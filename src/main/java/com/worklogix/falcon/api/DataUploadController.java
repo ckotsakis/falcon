@@ -47,6 +47,10 @@ public class DataUploadController {
 
     }
 
+    @DeleteMapping
+    public void deleteData(@RequestParam("tablename") String tablename){
+         uploadService.deleteData(tablename);
+    }
 
 
 }
