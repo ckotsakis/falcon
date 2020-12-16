@@ -25,10 +25,7 @@
 
             <hr>
 
-            <table id="tabProjects" class="table">
-                <tr>
-                    <td>Table for Projects</td>
-                </tr>
+            <table id="tabprojects" class="table">
             </table>
 
 
@@ -44,6 +41,7 @@
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
         //var table = $("#datatab").DataTable({});
+        loadProjects()
 
     });
 
@@ -55,41 +53,20 @@
 
     }
 
-    function browseData() {
-
-
-        //let data = new FormData($("#formBrowse")[0]);
-
-        //jQuery.each(jQuery('#dataFile')[0].files, function(i, file) {
-        //    data.append('file-'+i, file);
-        //});
-        //data.append("dataFile",jQuery('#dataFile')[0].files);
-        //data.append("tablename","testubg");
-
-        let criteria = $("#tablename").val();
+    function loadProjects() {
 
         jQuery.ajax({
-            url: '/dataUpload',
-            data: {tablename:criteria},
+            url: '/project',
             method: 'GET',
             dataType: "json",
             success: function(result){
-                //let data = JSON.stringify(result);
-                //console.log(result);
-                //$("#test").text(data);
-
-                //Traverse the objects and create the columns and then add each row to the table
                 let columns = [];
 
-                let columnNames = Object.keys(result[0]);
-                console.log(columnNames.length);
+                columns.push({data:"_id",title:"ID"});
+                columns.push({data:"name",title:"Project"});
+                columns.push({data:"description",title:"Description"});
 
-                for(let i = 0; i < columnNames.length; i++) {
-                    columns.push({data:columnNames[i],title:capitalizeFirstLetter(columnNames[i])});
-                    console.log(columnNames[i]);
-                }
-
-                let table = $('#datatab').DataTable({
+                let table = $('#tabprojects').DataTable({
                     data: result,
                     columns: columns
                 });
