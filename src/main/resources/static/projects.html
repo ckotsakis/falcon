@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Falcon Projects</title>
     <script src="assets/js/jquery.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
@@ -21,15 +21,13 @@
             <br>
             <h3>Projects</h3>
 
-            <button type="button" class="btn btn-primary" onclick="createProject()">Create Project</button>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='index.html';">Create Project</button>
 
             <hr>
 
-            <table id="tabProjects" class="table">
-                <tr>
-                    <td>Table for Projects</td>
-                </tr>
+            <table id="tabprojects" class="table">
             </table>
+
 
 
         </div> <!-- End of the Col -->
@@ -44,6 +42,7 @@
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
         //var table = $("#datatab").DataTable({});
+        loadProjects()
 
     });
 
@@ -55,43 +54,32 @@
 
     }
 
-    function browseData() {
-
-
-        //let data = new FormData($("#formBrowse")[0]);
-
-        //jQuery.each(jQuery('#dataFile')[0].files, function(i, file) {
-        //    data.append('file-'+i, file);
-        //});
-        //data.append("dataFile",jQuery('#dataFile')[0].files);
-        //data.append("tablename","testubg");
-
-        let criteria = $("#tablename").val();
+    function loadProjects() {
 
         jQuery.ajax({
-            url: '/dataUpload',
-            data: {tablename:criteria},
+            url: '/project',
             method: 'GET',
             dataType: "json",
             success: function(result){
-                //let data = JSON.stringify(result);
-                //console.log(result);
-                //$("#test").text(data);
-
-                //Traverse the objects and create the columns and then add each row to the table
                 let columns = [];
 
-                let columnNames = Object.keys(result[0]);
-                console.log(columnNames.length);
+                columns.push({data:"_id",title:"ID"});
+                columns.push({data:"name",title:"Project"});
+                columns.push({data:"description",title:"Description"});
 
-                for(let i = 0; i < columnNames.length; i++) {
-                    columns.push({data:columnNames[i],title:capitalizeFirstLetter(columnNames[i])});
-                    console.log(columnNames[i]);
-                }
-
-                let table = $('#datatab').DataTable({
+                let table = $('#tabprojects').DataTable({
                     data: result,
-                    columns: columns
+                    columns: [
+                        {"data": "_id", "name": "_id"},
+                        { "data": "name", "name": "Project",
+                            fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                                if(oData.name) {
+                                    $(nTd).html("<a href='/projects/" + oData._id + "'>"+oData.name+"</a>");
+                                }
+                            }
+                        },
+                        { "data": "description", "name": "Description" },
+                    ]
                 });
 
             }
