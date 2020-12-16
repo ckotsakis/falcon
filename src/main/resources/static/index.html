@@ -91,6 +91,9 @@
     });
 
     function InitForm() {
+
+        var select = document.getElementById("project");
+
         jQuery.ajax({
             url: '/project',
             cache: false,
@@ -98,7 +101,17 @@
             processData: false,
             method: 'GET',
             success: function(data){
-                alert(data);
+                var json = JSON.parse(data);
+                alert(json);
+                for (var i = 0; i < json.length; i++) {
+                    var name = json[i].name;
+                    console.log(name);
+
+                    var el = document.createElement("option");
+                    el.textContent = json[i].name;
+                    el.value = json[i]._id;
+                    select.appendChild(el);
+                }
             }
         });
     }
@@ -121,7 +134,7 @@
             processData: false,
             method: 'POST',
             success: function(data){
-                alert(data);
+               // alert(data);
             }
         });
 
