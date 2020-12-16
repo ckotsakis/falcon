@@ -20,6 +20,7 @@ import java.util.UUID;
 public class ProjectDao {
 
     private String database = "mongodb://192.168.1.34:27017";
+    DataImport dataImport = new DataImport();
 
     public void createProject(String projectName,String projectDescription) throws IOException {
         final String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
@@ -41,7 +42,7 @@ public class ProjectDao {
 
     }
 
-    public String getProjects(String id) {
+    public String getProjects() {
 
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
@@ -110,8 +111,7 @@ public class ProjectDao {
                 delete = (Document) o;
                 collection.updateOne(filter, Updates.pull("data", delete));
                 String name = (String) collection.find(filter).first().get("name");
-                DataImport di = new DataImport();
-                di.deleteData(name);
+                dataImport.deleteData(name);
                 break;
             }
         }

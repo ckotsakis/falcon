@@ -91,7 +91,16 @@
     });
 
     function InitForm() {
-
+        jQuery.ajax({
+            url: '/project',
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'GET',
+            success: function(data){
+                alert(data);
+            }
+        });
     }
 
     function postData() {

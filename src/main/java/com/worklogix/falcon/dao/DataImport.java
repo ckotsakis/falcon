@@ -14,8 +14,6 @@ public class DataImport implements DataDao {
     private String database = "mongodb://192.168.1.34:27017";
     //private String collectionName = "mongodb://localhost:27017";
 
-    ProjectDao projectDao = new ProjectDao();
-
     @Override
     public void importData(String id, String fileName,String tableName, String desc) throws IOException {
 
@@ -52,6 +50,7 @@ public class DataImport implements DataDao {
 
                 System.out.println(line);
             }
+            ProjectDao projectDao = new ProjectDao();
             projectDao.addData(id, tableName, desc, fileName);
             mongoClient.close();
         }

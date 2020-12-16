@@ -29,7 +29,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    public String getProjects(@RequestParam("projectId") String id){
-        return projectService.getProjects(id);
+    public String getProjects(){
+        return projectService.getProjects();
     }
 }

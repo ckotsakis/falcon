@@ -22,8 +22,8 @@ public class ProjectService implements IProjectService {
         projectDao.createProject(projectName, projectDescription);
     }
 
-    public String getProjects(String id){
-        return projectDao.getProjects(id);
+    public String getProjects(){
+        return projectDao.getProjects();
     }
 
     public void addData(String id, String name, String description, String fileName) throws  IOException{
