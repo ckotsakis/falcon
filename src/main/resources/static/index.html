@@ -71,25 +71,28 @@
 
 
         $("#btnSubmit").click(function(event) {
-
             // Fetch form to apply custom Bootstrap validation
             let form = $("#formUpload")
-
             if (form[0].checkValidity() === false) {
                 event.preventDefault()
                 event.stopPropagation()
             } else {
                postData();
             }
-
             form.addClass('was-validated');
-
         });
+
+        //Load the projects drop down
+        InitForm();
 
 
 
 
     });
+
+    function InitForm() {
+
+    }
 
     function postData() {
 
