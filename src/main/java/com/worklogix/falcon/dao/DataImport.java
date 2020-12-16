@@ -14,8 +14,10 @@ public class DataImport implements DataDao {
     private String database = "mongodb://192.168.1.34:27017";
     //private String collectionName = "mongodb://localhost:27017";
 
+    ProjectDao projectDao = new ProjectDao();
+
     @Override
-    public void importData(String fileName,String tableName, String desc) throws IOException {
+    public void importData(String id, String fileName,String tableName, String desc) throws IOException {
 
         BufferedReader input = new BufferedReader(new FileReader(fileName));
         String line;
@@ -48,18 +50,11 @@ public class DataImport implements DataDao {
                 }
                 collection.insertOne(doc);
 
-            /*
-            Document doc = new Document(columnNames[0], snippet.getName());
-            doc.append("description", snippet.getDescription());
-            doc.append("category", snippet.getCategory());
-            doc.append("snippet", snippet.getSnippet());
-            doc.append("technology", snippet.getTechnology());
-            collection.insertOne(doc);
-            */
 
                 System.out.println(line);
-                mongoClient.close();
             }
+            projectDao.addData(id, tableName, desc, fileName);
+            mongoClient.close();
         }
     }
 
@@ -95,6 +90,5 @@ public class DataImport implements DataDao {
         return resultset;
 
     }
-
 
 }
