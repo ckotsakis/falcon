@@ -32,4 +32,9 @@ public class ProjectController {
     public String getProjects(){
         return projectService.getProjects();
     }
+
+    @GetMapping("/data")
+    public String getData(@RequestParam("id") String id){
+        return projectService.getData(id);
+    }
 }

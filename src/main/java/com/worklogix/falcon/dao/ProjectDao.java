@@ -101,6 +101,34 @@ public class ProjectDao {
         mongoClient.close();
     }
 
+    public String getData(String id) {
+
+        MongoClient mongoClient = MongoClients.create(database);
+        MongoDatabase database = mongoClient.getDatabase("staging");
+
+        MongoCollection<Document> collection = database.getCollection("projects");
+
+        String resultset = "";
+        StringBuilder items = new StringBuilder();
+
+        Bson filter = new Document("_id", new ObjectId(id));
+
+        ArrayList<?> doc = collection.find(filter).first().get("data", ArrayList.class);
+
+        for (int i = 0; i < doc.size(); i++) {
+            Document str = (Document) doc.get(i);
+            items.append(str.toJson());
+            if(i < (doc.size() - 1)){
+                items.append(",");
+            }
+        }
+
+        resultset = "[" + items.toString() + "]";
+        System.out.println(resultset);
+        mongoClient.close();
+        return resultset;
+    }
+
     public void removeData(String id, String uuid){
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
