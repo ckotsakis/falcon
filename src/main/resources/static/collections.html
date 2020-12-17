@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Falcon Projects</title>
+    <title>Falcon Project Collections</title>
     <script src="assets/js/jquery.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
@@ -19,13 +19,9 @@
     <div class="row">
         <div class="col-sm-12">
             <br>
-            <h3>Projects</h3>
+            <h3>Collections</h3>
 
-            <button type="button" class="btn btn-primary" onclick="window.location.href='index.html';">Create Project</button>
-
-            <hr>
-
-            <table id="tabprojects" class="table">
+            <table id="tabcollect" class="table">
             </table>
 
 
@@ -42,7 +38,7 @@
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
         //var table = $("#datatab").DataTable({});
-        loadProjects()
+        //loadCollections()
 
     });
 
@@ -50,30 +46,32 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    function loadProjects() {
+
+    function loadCollections() {
 
         jQuery.ajax({
             url: '/project',
             method: 'GET',
             dataType: "json",
             success: function(result){
-                let columns = [];
+                //let columns = [];
 
-                columns.push({data:"_id",title:"ID"});
-                columns.push({data:"name",title:"Project"});
-                columns.push({data:"description",title:"Description"});
+                //columns.push({data:"_id",title:"ID"});
+                //columns.push({data:"name",title:"Project"});
+                //columns.push({data:"description",title:"Description"});
 
-                let table = $('#tabprojects').DataTable({
+                let table = $('#tabcollect').DataTable({
                     data: result,
                     columns: [
-                        {"data": "name", "title": "Project",
+                        {"data": "_id", "name": "_id"},
+                        { "data": "name", "name": "Project",
                             fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
                                 if(oData.name) {
-                                    $(nTd).html("<a href='/collections.html?project=" + oData._id + "'>"+oData.name+"</a>");
+                                    $(nTd).html("<a href='/dataUpload/" + oData._id + "'>"+oData.name+"</a>");
                                 }
                             }
                         },
-                        {"data": "description", "title": "Description" }
+                        { "data": "description", "name": "Description" },
                     ]
                 });
 

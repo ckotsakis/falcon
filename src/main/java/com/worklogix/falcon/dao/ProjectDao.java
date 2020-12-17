@@ -7,14 +7,14 @@ import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 public class ProjectDao {
@@ -58,15 +58,34 @@ public class ProjectDao {
         //String strID = (String) idObj.get("$oid");
 
         while (cursor.hasNext()) {
+            String str = cursor.next().toJson();
+            System.out.println(str);
+            str = str.replace("{\"$oid\":","");
+            str = str.replace("},",",");
+            System.out.println(str);
+/*
+            JsonParser springParser = JsonParserFactory.getJsonParser();
+            Map<String, Object> map = springParser.parseMap(str);
+            String mapArray[] = new String[map.size()];
+            //System.out.println("Items found: " + mapArray.length);
 
-            items.append(cursor.next().toJson());
+            int i = 0;
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                System.out.println(entry.getKey() + " = " + entry.getValue());
+                i++;
+            }
+*/
+            //db.projects.aggregate([{$project:{"_id":{$toString:"$_id"},"name":1,"description":1}}])
+
+
+            items.append(str);
             if (cursor.hasNext()) {
                 items.append(",");
             }
         }
 
         resultset = "[" + items.toString() + "]";
-        System.out.println(resultset);
+        //System.out.println(resultset);
         mongoClient.close();
         return resultset;
     }
