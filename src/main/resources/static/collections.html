@@ -38,7 +38,7 @@
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
         //var table = $("#datatab").DataTable({});
-        //loadCollections()
+        loadCollections()
 
     });
 
@@ -46,35 +46,55 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    function getUrlVars() {
+        let vars = {};
+        let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        function(m,key,value) {
+            vars[key] = value;
+        });
+        return vars;
+
+        //var number = getUrlVars()["x"];
+        //var mytext = getUrlVars()["text"];
+
+    }
+
+    function getUrlParam(parameter, defaultvalue){
+        let urlparameter = defaultvalue;
+        if(window.location.href.indexOf(parameter) > -1){
+            urlparameter = getUrlVars()[parameter];
+        }
+        return urlparameter;
+
+        //var mytext = getUrlParam('text','Empty');
+
+    }
+
+
 
     function loadCollections() {
 
+
         jQuery.ajax({
-            url: '/project',
+            url: '/project/data',
+            data: {id: getUrlParam('project','Empty')},
             method: 'GET',
             dataType: "json",
             success: function(result){
-                //let columns = [];
-
-                //columns.push({data:"_id",title:"ID"});
-                //columns.push({data:"name",title:"Project"});
-                //columns.push({data:"description",title:"Description"});
 
                 let table = $('#tabcollect').DataTable({
                     data: result,
-                    columns: [
-                        {"data": "_id", "name": "_id"},
-                        { "data": "name", "name": "Project",
+                    columns:[
+                        { "data": "name", "name": "Collection",
                             fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
                                 if(oData.name) {
-                                    $(nTd).html("<a href='/dataUpload/" + oData._id + "'>"+oData.name+"</a>");
+                                    $(nTd).html("<a href='/dataUpload/" + oData.id + "'>"+oData.name+"</a>");
                                 }
                             }
                         },
                         { "data": "description", "name": "Description" },
                     ]
                 });
-
             }
 
         });
