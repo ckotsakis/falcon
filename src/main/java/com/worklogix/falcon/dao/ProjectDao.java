@@ -1,5 +1,6 @@
 package com.worklogix.falcon.dao;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Projections;
@@ -33,7 +34,8 @@ public class ProjectDao {
         Document doc = new Document("name", projectName);
         doc.append("description", projectDescription);
         doc.append("createdon", today);
-        doc.append("data", new Document());
+        BasicDBList dbl = new BasicDBList();
+        doc.append("data", dbl);
 
         collection.insertOne(doc);
 
