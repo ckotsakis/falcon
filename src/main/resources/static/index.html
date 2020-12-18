@@ -22,8 +22,8 @@
             <form id="formUpload" class="needs-validation" novalidate>
 
                 <div class="form-group">
-                    <label for="project">Select a Project</label>
-                    <select class="form-control" id="project">
+                    <label for="projectid">Select a Project</label>
+                    <select class="form-control" id="projectid" name="projectid">
                     </select>
                 </div>
                 <div class="form-group">
@@ -92,7 +92,7 @@
 
     function InitForm() {
 
-        var select = document.getElementById("project");
+        var select = document.getElementById("projectid");
 
         jQuery.ajax({
             url: '/project',
@@ -102,7 +102,6 @@
             method: 'GET',
             success: function(data){
                 var json = JSON.parse(data);
-                alert(json);
                 for (var i = 0; i < json.length; i++) {
                     var name = json[i].name;
                     console.log(name);
