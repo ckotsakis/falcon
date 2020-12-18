@@ -126,7 +126,7 @@ public class ProjectDao {
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
 
-        MongoCollection<Document> collection = database.getCollection("projects");
+        MongoCollection<Document> collection  =database.getCollection("projects");
 
         String resultset = "";
         StringBuilder items = new StringBuilder();

@@ -96,7 +96,7 @@
                         { "data": "name", "title": "Collection",
                             fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
                                 if(oData.name) {
-                                    $(nTd).html("<a href='/databrowse.html?collection=" + oData.id + "'>" + oData.name + "</a>");
+                                    $(nTd).html("<a href='/databrowse.html?collection=" + oData.id + "&project=" + getUrlParam('project','Empty') + "'>" + oData.name + "</a>");
                                 }
                             }
                         },
