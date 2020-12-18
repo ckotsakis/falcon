@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Testing this page</title>
+    <script src="assets/js/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+
+            <h3>Data File Upload</h3>
+
+            <!--form method="post" enctype="multipart/form-data" action="/dataUpload"-->
+
+            <form id="project" class="needs-validation" novalidate>
+
+                <div class="form-group">
+                    <label for="projname">Project Name</label>
+                    <input type="text" class="form-control invalid" id="projname" name="projname" aria-describedby="projname_help" required>
+                    <small id="projname_help" class="form-text text-muted">Enter Project</small>
+                    <div class="invalid-feedback">
+                        Please enter a valid Project Name
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="desc">Description</label>
+                    <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+                    <small id="desc_help" class="form-text text-muted">Enter a project description</small>
+                    <div class="invalid-feedback">
+                        Please enter a brief description of the project
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary" id="btnSubmit">Save</button>
+                <button type="button" class="btn btn-primary" onclick="window.location.href='projects.html';">Create Project</button>
+
+            </form>
+
+        </div> <!-- End of the Col -->
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function(){
+
+        //$('[data-rel=tooltip]').tooltip();
+        //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
+
+
+        $("#btnSubmit").click(function(event) {
+            // Fetch form to apply custom Bootstrap validation
+            let form = $("#formUpload")
+            if (form[0].checkValidity() === false) {
+                event.preventDefault()
+                event.stopPropagation()
+            } else {
+                postData();
+            }
+            form.addClass('was-validated');
+        });
+
+        //Load the projects drop down
+        //InitForm();
+
+
+
+
+    });
+
+    function InitForm() {
+
+        var select = document.getElementById("project");
+
+        jQuery.ajax({
+            url: '/project',
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'GET',
+            success: function(data){
+                var json = JSON.parse(data);
+
+                for (var i = 0; i < json.length; i++) {
+                    var name = json[i].name;
+                    console.log(name);
+
+                    var el = document.createElement("option");
+                    el.textContent = json[i].name;
+                    el.value = json[i]._id;
+                    select.appendChild(el);
+                }
+            }
+        });
+    }
+
+    function postData() {
+
+        let data = new FormData($("#formUpload")[0]);
+
+        //jQuery.each(jQuery('#dataFile')[0].files, function(i, file) {
+        //    data.append('file-'+i, file);
+        //});
+        //data.append("dataFile",jQuery('#dataFile')[0].files);
+        //data.append("tablename","testubg");
+
+        jQuery.ajax({
+            url: '/project',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            success: function(data){
+                // alert(data);
+            }
+        });
+
+    }
+
+</script>
+
+</body>
+</html>
