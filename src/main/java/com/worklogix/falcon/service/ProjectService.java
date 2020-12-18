@@ -30,8 +30,8 @@ public class ProjectService implements IProjectService {
         return projectDao.getData(id);
     }
 
-    public void addData(String id, String name, String description, String fileName) throws  IOException{
-        projectDao.addData(id, name, description, fileName);
+    public void addData(String id, String name, String description, String fileName, String techName) throws  IOException{
+        projectDao.addData(id, name, description, fileName, techName);
     }
 
     public void removeData(String id, String uuid) throws  IOException{

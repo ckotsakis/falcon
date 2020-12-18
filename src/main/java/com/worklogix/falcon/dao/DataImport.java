@@ -1,5 +1,9 @@
 package com.worklogix.falcon.dao;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.client.*;
@@ -8,6 +12,7 @@ import org.bson.Document;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 
 @Repository("mongoDao")
 public class DataImport implements DataDao {
@@ -15,7 +20,7 @@ public class DataImport implements DataDao {
     //private String collectionName = "mongodb://localhost:27017";
 
     @Override
-    public void importData(String id, String fileName,String tableName, String desc) throws IOException {
+    public void importData(String id, String fileName,String tableName, String desc, String techName) throws IOException {
 
         BufferedReader input = new BufferedReader(new FileReader(fileName));
         String line;
@@ -32,11 +37,12 @@ public class DataImport implements DataDao {
             //Save data to folders
             MongoCollection<Document> collection = database.getCollection("folder");
             Document doc = new Document(columnNames[0], tableName);
+            doc.append("techname", techName);
             doc.append("description", desc);
             collection.insertOne(doc);
 
             // Load data into table
-            collection = database.getCollection(tableName);
+            collection = database.getCollection(techName);
 
             String[] row;
 
@@ -51,7 +57,7 @@ public class DataImport implements DataDao {
                 System.out.println(line);
             }
             ProjectDao projectDao = new ProjectDao();
-            projectDao.addData(id, tableName, desc, fileName);
+            projectDao.addData(id, tableName, desc, fileName, techName);
             mongoClient.close();
         }
     }
@@ -60,16 +66,38 @@ public class DataImport implements DataDao {
     public String getData(String id) {
 
         String resultset = "";
+        String tablename = "";
 
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
 
         //use the ID to find the table name
+        MongoCollection<Document> projects = database.getCollection("projects");
+        Document projdoc = projects.find(new Document("data.id",id)).first();
 
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject obj = (JSONObject) jsonParser.parse(projdoc.toJson());
+            JSONArray data = (JSONArray) obj.get("data");
 
+            Iterator objIter = data.iterator();
+            int i = 0;
+            while (objIter.hasNext()) {
+                JSONObject jso = (JSONObject) objIter.next();
+                String str = (String) jso.get("id");
+                if(str.contains(id)) {
+                    break;
+                }
+                i++;
+            }
+            JSONObject col = (JSONObject) data.get(i);
+            tablename = (String) col.get("techname");
 
+        } catch (ParseException parseException) {
+            System.out.println(parseException.getMessage());
+        }
 
-        MongoCollection<Document> collection = database.getCollection(id);
+        MongoCollection<Document> collection = database.getCollection(tablename);
 
         if (id.length() > 0) {
             //Document myDoc = collection.find();
@@ -93,7 +121,7 @@ public class DataImport implements DataDao {
         }
 
         mongoClient.close();
-        System.out.println(resultset);
+        //System.out.println(resultset);
 
         return resultset;
 

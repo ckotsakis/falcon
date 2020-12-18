@@ -94,23 +94,22 @@ public class ProjectDao {
 
 
 
-    public void addData(String id, String name, String description, String fileName) throws IOException{
+    public void addData(String id, String name, String description, String fileName, String techName) throws IOException{
         final String uuid = UUID.randomUUID().toString();
         final String today = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
 
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
-
         MongoCollection<Document> collection = database.getCollection("projects");
 
         Bson filter = new Document("_id", new ObjectId(id));
 
         //uuid, name, description, fileName
-
         //String value = String.format("{\"id\":\"%s\",\"name\":\"%s\",\"description\":\"%s\",\"fileName\":\"%s\",\"today\":\"%s\"}",uuid,name,description,fileName, today);
 
         Document doc = new Document("id", uuid);
         doc.append("name", name);
+        doc.append("techname", techName);
         doc.append("description", description);
         doc.append("filename", fileName);
         doc.append("uploaded",today);

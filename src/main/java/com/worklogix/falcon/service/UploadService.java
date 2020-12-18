@@ -21,7 +21,7 @@ public class UploadService {
         this.dataDao = dataDao;
     }
 
-    public void saveDataFile(String id, MultipartFile dataFile, String tableName, String desc) throws IOException {
+    public void saveDataFile(String id, MultipartFile dataFile, String tableName, String desc, String techName) throws IOException {
 
         String folder = System.getProperty("user.home") + "/Downloads/";
 
@@ -29,7 +29,7 @@ public class UploadService {
         Path path = Paths.get(folder + dataFile.getOriginalFilename());
         //Write the file locally so we can read it into a database
         Files.write(path, bytes);
-        dataDao.importData(id, folder.concat(dataFile.getOriginalFilename()),tableName, desc);
+        dataDao.importData(id, folder.concat(dataFile.getOriginalFilename()),tableName, desc, techName);
 
     }
 

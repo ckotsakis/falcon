@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Falcon Project Collections</title>
+    <title>Title</title>
     <script src="assets/js/jquery.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
@@ -18,13 +18,17 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
-            <br>
-            <h3>Collections</h3>
 
-            <button type="button" class="btn btn-primary" onclick="uploadData()">Upload Data</button>
+            <h3>Data Browser</h3>
+
+            <button type="button" class="btn btn-primary" onclick="window.location.href='projects.html';">Projects</button>
             <hr>
-            <table id="tabcollect" class="table">
+
+            <table class="table" id="datatab">
+
             </table>
+
+
 
         </div> <!-- End of the Col -->
     </div>
@@ -32,13 +36,16 @@
 
 
 <script type="text/javascript">
+
     $(document).ready(function(){
 
         //$('[data-rel=tooltip]').tooltip();
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
         //var table = $("#datatab").DataTable({});
-        loadCollections()
+        //alert(getUrlParam('collection','Empty'))
+
+        browseData(getUrlParam('collection','Empty'))
 
     });
 
@@ -49,9 +56,9 @@
     function getUrlVars() {
         let vars = {};
         let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-        function(m,key,value) {
-            vars[key] = value;
-        });
+            function(m,key,value) {
+                vars[key] = value;
+            });
         return vars;
 
         //var number = getUrlVars()["x"];
@@ -70,39 +77,45 @@
 
     }
 
-    function uploadData() {
-
-        let param = getUrlParam('project','Empty');
-        window.location.href="/dataupload.html?project=" + param;
-
-    }
+    function browseData(tablename) {
 
 
+        //let data = new FormData($("#formBrowse")[0]);
 
-    function loadCollections() {
+        //jQuery.each(jQuery('#dataFile')[0].files, function(i, file) {
+        //    data.append('file-'+i, file);
+        //});
+        //data.append("dataFile",jQuery('#dataFile')[0].files);
+        //data.append("tablename","testubg");
 
+        let criteria = $("#tablename").val();
 
         jQuery.ajax({
-            url: '/project/data',
-            data: {id: getUrlParam('project','Empty')},
+            url: '/dataUpload',
+            data: {id:tablename},
             method: 'GET',
             dataType: "json",
             success: function(result){
+                //let data = JSON.stringify(result);
+                //console.log(result);
+                //$("#test").text(data);
 
-                let table = $('#tabcollect').DataTable({
+                //Traverse the objects and create the columns and then add each row to the table
+                let columns = [];
+
+                let columnNames = Object.keys(result[0]);
+                console.log(columnNames.length);
+
+                for(let i = 0; i < columnNames.length; i++) {
+                    columns.push({data:columnNames[i],title:capitalizeFirstLetter(columnNames[i])});
+                    console.log(columnNames[i]);
+                }
+
+                let table = $('#datatab').DataTable({
                     data: result,
-                    columns:[
-                        { "data": "id", "title": "ID" },
-                        { "data": "name", "title": "Collection",
-                            fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-                                if(oData.name) {
-                                    $(nTd).html("<a href='/databrowse.html?collection=" + oData.id + "'>" + oData.name + "</a>");
-                                }
-                            }
-                        },
-                        { "data": "description", "title": "Description" }
-                    ]
+                    columns: columns
                 });
+
             }
 
         });

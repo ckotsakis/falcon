@@ -22,7 +22,8 @@ public class DataUploadController {
     public String dataUpload(@RequestParam("dataFile") MultipartFile dataFile,
                              @RequestParam("tablename") String tablename,
                              @RequestParam("desc") String desc,
-                             @RequestParam("projectid") String id) {
+                             @RequestParam("projectid") String id,
+                             @RequestParam("techname") String techname) {
 
         String returnValue = "start";
 
@@ -32,7 +33,7 @@ public class DataUploadController {
         //System.out.println(tablename);
 
         try {
-            uploadService.saveDataFile(id, dataFile, tablename, desc);
+            uploadService.saveDataFile(id, dataFile, tablename, desc, techname);
         } catch (IOException e) {
             e.printStackTrace();
             returnValue = "error";
