@@ -42,8 +42,9 @@ public class DataUploadController {
     }
 
     @GetMapping
-    public String getData(@RequestParam("tablename") String tablename){
-        return uploadService.getData(tablename);
+    public String getData(@RequestParam("id") String id){
+
+        return uploadService.getData(id);
 
     }
 

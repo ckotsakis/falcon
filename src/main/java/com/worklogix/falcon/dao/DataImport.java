@@ -57,21 +57,31 @@ public class DataImport implements DataDao {
     }
 
     @Override
-    public String getData(String tableName) {
+    public String getData(String id) {
 
         String resultset = "";
 
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
-        MongoCollection<Document> collection = database.getCollection(tableName);
 
-        if (tableName.length() > 0) {
+        //use the ID to find the table name
+
+
+
+
+        MongoCollection<Document> collection = database.getCollection(id);
+
+        if (id.length() > 0) {
             //Document myDoc = collection.find();
             StringBuilder items = new StringBuilder();
 
             MongoCursor<Document> cursor = collection.find().iterator();
             while (cursor.hasNext()) {
-                items.append(cursor.next().toJson());
+                String str = cursor.next().toJson();
+
+                str = str.replace("{\"$oid\":","");
+                str = str.replace("},",",");
+                items.append(str);
                 if (cursor.hasNext()) {
                     items.append(",");
                 }
