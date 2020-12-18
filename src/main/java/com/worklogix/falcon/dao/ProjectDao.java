@@ -92,6 +92,10 @@ public class ProjectDao {
         return resultset;
     }
 
+    public void deleteProjects(){
+
+    }
+
 
 
     public void addData(String id, String name, String description, String fileName, String techName) throws IOException{
