@@ -114,8 +114,8 @@ public class ProjectDao {
         doc.append("uploaded",today);
 
         //Bson newValue = new Document("data", doc);
-
         //Bson updateOperationDocument = new Document("$set", newValue);
+
         collection.updateOne(filter, Updates.addToSet("data", doc));
         mongoClient.close();
     }

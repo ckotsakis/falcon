@@ -26,10 +26,10 @@ public class DataUploadController {
 
         String returnValue = "start";
 
-        //System.out.println("We got a post!");
+        System.out.println(id);
         //System.out.println(System.getProperty("user.home"));
 
-        System.out.println(tablename);
+        //System.out.println(tablename);
 
         try {
             uploadService.saveDataFile(id, dataFile, tablename, desc);
