@@ -132,18 +132,22 @@ public class ProjectDao {
 
         Bson filter = new Document("_id", new ObjectId(id));
 
-        ArrayList<?> doc = collection.find(filter).first().get("data", ArrayList.class);
+        if(collection.find(filter).first().get("data", ArrayList.class) != null) {
+            ArrayList<?> doc = collection.find(filter).first().get("data", ArrayList.class);
 
-        for (int i = 0; i < doc.size(); i++) {
-            Document str = (Document) doc.get(i);
-            items.append(str.toJson());
-            if(i < (doc.size() - 1)){
-                items.append(",");
+            for (int i = 0; i < doc.size(); i++) {
+                Document str = (Document) doc.get(i);
+                items.append(str.toJson());
+                if (i < (doc.size() - 1)) {
+                    items.append(",");
+                }
             }
-        }
 
-        resultset = "[" + items.toString() + "]";
-        System.out.println(resultset);
+            resultset = "[" + items.toString() + "]";
+            System.out.println(resultset);
+        } else {
+            resultset = "No data";
+        }
         mongoClient.close();
         return resultset;
     }

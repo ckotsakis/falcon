@@ -19,10 +19,10 @@ public class DataUploadController {
     }
 
     @PostMapping
-    public String dataUpload(//@RequestParam("dataFile") String id,
-                             @RequestParam("dataFile") MultipartFile dataFile,
+    public String dataUpload(@RequestParam("dataFile") MultipartFile dataFile,
                              @RequestParam("tablename") String tablename,
-                             @RequestParam("desc") String desc) {
+                             @RequestParam("desc") String desc,
+                             @RequestParam("projectid") String id) {
 
         String returnValue = "start";
 
@@ -32,7 +32,7 @@ public class DataUploadController {
         System.out.println(tablename);
 
         try {
-            uploadService.saveDataFile("5fd6a3ad8120df4666ddc7a2", dataFile, tablename, desc);
+            uploadService.saveDataFile(id, dataFile, tablename, desc);
         } catch (IOException e) {
             e.printStackTrace();
             returnValue = "error";
