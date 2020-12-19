@@ -92,7 +92,7 @@ public class ProjectDao {
         return resultset;
     }
 
-    public void deleteProjects(){
+    public void deleteProject(String id){
 
     }
 
@@ -172,7 +172,7 @@ public class ProjectDao {
             if (o.toString().contains(uuid)) {
                 delete = (Document) o;
                 collection.updateOne(filter, Updates.pull("data", delete));
-                String name = (String) collection.find(filter).first().get("name");
+                String name = (String) collection.find(filter).first().get("techname");
                 dataImport.deleteData(name);
                 break;
             }

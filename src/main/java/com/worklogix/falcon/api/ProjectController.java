@@ -36,4 +36,14 @@ public class ProjectController {
     public String getData(@RequestParam("id") String id){
         return projectService.getData(id);
     }
+
+    @DeleteMapping
+    public void removeData(@RequestParam("id") String id, @RequestParam("dataid") String uuid){
+        try {
+            projectService.removeData(id, uuid);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
