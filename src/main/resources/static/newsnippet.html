@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>HTML Accelerators</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,500;1,700&display=swap" rel="stylesheet">
+
+    <script src="assets/js/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" >
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="assets/DataTables/datatables.min.css" >
+    <script src="assets/DataTables/datatables.min.js"></script>
+
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css" >
+    <script src="assets/fontawesome/js/fontawesome.min.js"></script>
+
+
+    <link rel="stylesheet" href="assets/codemirror-5.53.2/lib/codemirror.css" >
+    <script src="assets/codemirror-5.53.2/lib/codemirror.js"></script>
+
+    <script src="assets/codemirror-5.53.2/addon/selection/selection-pointer.js"></script>
+    <script src="assets/codemirror-5.53.2/mode/xml/xml.js"></script>
+    <script src="assets/codemirror-5.53.2/mode/javascript/javascript.js"></script>
+    <script src="assets/codemirror-5.53.2/mode/css/css.js"></script>
+    <script src="assets/codemirror-5.53.2/mode/vbscript/vbscript.js"></script>
+
+    <script src="assets/codemirror-5.53.2/addon/edit/matchbrackets.js"></script>
+    <script src="assets/codemirror-5.53.2/mode/htmlmixed/htmlmixed.js"></script>
+
+    <link rel="stylesheet" href="assets/codemirror-5.53.2/addon/hint/show-hint.css" />
+
+    <script src="assets/codemirror-5.53.2/addon/hint/html-hint.js"></script>
+
+    <script src="assets/js/clipboard.min.js"></script>
+
+
+    <link rel="stylesheet" href="assets/css/dashboard2.css">
+
+    <script src="assets/menus/snippets.js"></script>
+    <script src="assets/js/datapopulate.js"></script>
+
+
+     <style>
+        .CodeMirror {
+          font-size: 18px;
+          height: 400px;
+        }
+      </style>
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-dark fixed-top bg-wlx flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Code Gen</a>
+      <div class="col-sm-9 col-md-10 mr-0">
+          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            DEVELOPMENT
+          </button>
+
+      </div>
+    </nav>
+
+
+
+    <div class="container-fluid">
+      <!-- Content here -->
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <br>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1">
+              <span>Accelerators</span>
+              <a class="d-flex align-items-center text-muted" href="#" aria-label="Create Table">
+                <i class="far fa-plus"></i>
+              </a>
+            </h6>
+
+
+            <ul class="nav flex-column" id="navitems">
+
+              <li class="nav-item">
+                <a class="nav-link active" href="tablegen2.html">
+                  <i class="far fa-table"></i>
+                  Table Generator
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="formgen.html">
+                  <i class="far fa-file"></i>
+                  Form Generator
+                </a>
+              </li>
+
+            </ul>
+
+
+          </div>
+        </nav>
+
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">New Snippet</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" class="btn btn-sm btn-primary" onclick="postData()">SAVE</button>
+                 <button type="button" class="btn btn-sm btn-outline-secondary" class="btn btn-sm btn-primary" onclick="window.location.href='library.html';">CANCEL</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Goes Here -->
+
+            <div class="row">
+              <div class="col-lg">
+                
+                <form id="formSnippet">
+                  <div class="form-group">
+                    <label for="snippetName">Snippet Name</label>
+                    <input type="text" class="form-control" name="snippetName" id="snippetName" placeholder="Enter name of snippet">
+                  </div>
+                  <div class="form-group">
+                    <label for="snippetDescription">Description</label>
+                    <textarea class="form-control" name="snippetDescription" id="snippetDescription" rows="3"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="language">Language</label>
+                    <select class="form-control" id="language" name="language">
+                      <option value="1">Java</option>
+                      <option value="2">Javascript</option>
+                      <option value="3">SQL</option>
+                      <option value="4">HTML</option>
+                      <option value="4">System Command</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" name="category">
+                      <option value="1">Code</option>
+                      <option value="2">Database</option>
+                      <option value="3">Operating System</option>
+                      <option value="4">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="code">Code Fragment</label>
+                    <textarea id="code" name="code" class="editor"></textarea>
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
+
+          
+
+
+            <!--div class="row">
+              <div class="col-lg">
+                 <label for="category">Code Fragment</label>
+                <textarea id="codesnippet" class="editor"></textarea>  
+              </div>
+            </div-->
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- End Content -->
+
+
+        </main>
+
+      </div><!-- End Row -->
+
+    </div><!-- End Container-->
+
+
+
+
+    <script>
+
+        var editor
+
+        $(document).ready( function () {
+
+          var output = ""
+          var jsonData = menu.items
+
+          for ( var key in jsonData) {
+
+            output += "<li class=\"nav-item\">"
+            output += "<a class=\"nav-link\" id=\"" + jsonData[key].id + "\" href=\"" + jsonData[key].url + "\">"
+            output += "<i class=\"" + jsonData[key].icon + "\"></i> " + jsonData[key].label + "</a>"
+            output += "</li>\n"
+
+          }
+
+          $("#navitems").html(output);
+          $("#1").addClass("active");
+
+          var mixedMode = {
+            name: "htmlmixed",
+            scriptTypes: [{matches: /\/x-handlebars-template|\/x-mustache/i,
+                           mode: null},
+                          {matches: /(text|application)\/(x-)?vb(a|script)/i,
+                           mode: "vbscript"}]
+          };
+
+          editor = CodeMirror.fromTextArea(code, {
+            lineNumbers: true,
+            mode: mixedMode
+          });
+
+
+        });
+
+        function loadSnippet() {
+
+          //alert($('#snippet').val())
+
+           editor.setValue("<h1>This is a test</h1>");
+
+        }
+
+
+        function postData() {
+
+          //let data = new FormData($("#formSnippet")[0]);
+
+          //jQuery.each(jQuery('#dataFile')[0].files, function(i, file) {
+          //    data.append('file-'+i, file);
+          //});
+          //data.append("dataFile",jQuery('#dataFile')[0].files);
+          //data.append("tablename","testubg");
+
+          //data = {"snippetName": "manual","snippetDescription":"Description","language":"1","category":"1","code":"sample code"};
+          //let json = JSON.stringify(data);
+
+          let data = new FormData();
+          data.append("snippetName", $("#snippetName").val());
+          data.append("snippetDescription",$("#snippetDescription").val());
+          data.append("language", $("#language").val());
+          data.append("category", $("#category").val());
+          data.append("code",encodeURIComponent(editor.getValue()));
+
+         console.log("We did it.");
+
+          jQuery.ajax({
+            url: '/snippet',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            success: function(data){
+              // navigate back to collections
+              //let proj = getUrlParam('project','Empty');
+              window.location.href="library.html";
+            }
+          });
+
+        }
+
+
+
+    </script>
+
+
+  </body>
+</html>
