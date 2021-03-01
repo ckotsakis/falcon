@@ -14,46 +14,24 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-6">
+            <br>
+            <h3>Data System</h3>
 
-            <h3>Data File Upload</h3>
+            <button type="button" class="btn btn-primary" id="btnSubmit" onclick="window.location.href='projects.html'">Projects</button>
 
-            <!--form method="post" enctype="multipart/form-data" action="/dataUpload"-->
+            <br><br><br><br>
 
-            <form id="formUpload" class="needs-validation" novalidate>
+            <textarea id="tx" cols="60" rows="10"></textarea>
 
-                <div class="form-group">
-                    <label for="projectid">Select a Project</label>
-                    <select class="form-control" id="projectid" name="projectid">
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="tablename">Table Name</label>
-                    <input type="text" class="form-control invalid" id="tablename" name="tablename" aria-describedby="tabname_help" required>
-                    <small id="tabname_help" class="form-text text-muted">Enter the name of the table you would like to create</small>
-                    <div class="invalid-feedback">
-                        Please enter a valid Table Name
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="desc">Table Description</label>
-                    <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
-                    <small id="desc_help" class="form-text text-muted">Enter a table description</small>
-                    <div class="invalid-feedback">
-                        Please enter a brief description of the Table
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="dataFile">Select File for Upload</label>
-                    <input type="file" class="form-control-file" id="dataFile" name="dataFile" required>
-                    <div class="invalid-feedback">
-                        Please select a file
-                    </div>
-                </div>
+            <br>
 
-                <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
-                <!--button type="submit" class="btn btn-primary" onclick="postData()">Submit</button-->
+            <button type="button" class="btn btn-primary" onclick="encodeText()">Encode</button>
 
-            </form>
+            <br><br>
+
+            <textarea id="tx2" cols="60" rows="10"></textarea>            
+
+
 
         </div> <!-- End of the Col -->
     </div>
@@ -70,74 +48,22 @@
         //$('[data-rel=popover]').popover({html:true, trigger:'hover'});
 
 
-        $("#btnSubmit").click(function(event) {
-            // Fetch form to apply custom Bootstrap validation
-            let form = $("#formUpload")
-            if (form[0].checkValidity() === false) {
-                event.preventDefault()
-                event.stopPropagation()
-            } else {
-               postData();
-            }
-            form.addClass('was-validated');
-        });
-
-        //Load the projects drop down
-        InitForm();
-
-
-
-
     });
 
-    function InitForm() {
+    function encodeText() {
+        //alert($("#tx").val());
 
-        var select = document.getElementById("projectid");
+        var str = encodeURIComponent($("#tx").val());
 
-        jQuery.ajax({
-            url: '/project',
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'GET',
-            success: function(data){
-                var json = JSON.parse(data);
-                for (var i = 0; i < json.length; i++) {
-                    var name = json[i].name;
-                    console.log(name);
+        $("#tx2").val(decodeURIComponent(str));
 
-                    var el = document.createElement("option");
-                    el.textContent = json[i].name;
-                    el.value = json[i]._id;
-                    select.appendChild(el);
-                }
-            }
-        });
-    }
-
-    function postData() {
-
-        let data = new FormData($("#formUpload")[0]);
-
-        //jQuery.each(jQuery('#dataFile')[0].files, function(i, file) {
-        //    data.append('file-'+i, file);
-        //});
-        //data.append("dataFile",jQuery('#dataFile')[0].files);
-        //data.append("tablename","testubg");
-
-        jQuery.ajax({
-            url: '/dataUpload',
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            method: 'POST',
-            success: function(data){
-               // alert(data);
-            }
-        });
+        //$("#tx2").val(str);
 
     }
+
+
+
+
 
 </script>
 

@@ -26,7 +26,6 @@ public class DataImport implements DataDao {
         String line;
         String[] columnNames;
 
-
         if((line = input.readLine()) != null) {
             columnNames = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
             System.out.println(line + " (length = " + columnNames.length + ")");
@@ -103,7 +102,7 @@ public class DataImport implements DataDao {
             //Document myDoc = collection.find();
             StringBuilder items = new StringBuilder();
 
-            MongoCursor<Document> cursor = collection.find().iterator();
+            MongoCursor<Document> cursor = collection.find().limit(100).iterator();
             while (cursor.hasNext()) {
                 String str = cursor.next().toJson();
 

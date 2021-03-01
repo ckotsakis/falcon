@@ -78,7 +78,9 @@
 
     }
 
-
+    function deleteCol(id) {
+        alert("We are going to delete the id " + id);
+    }
 
     function loadCollections() {
 
@@ -93,7 +95,7 @@
                 let table = $('#tabcollect').DataTable({
                     data: result,
                     columns:[
-                        { "data": "id", "title": "ID" },
+
                         { "data": "name", "title": "Collection",
                             fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
                                 if(oData.name) {
@@ -101,7 +103,14 @@
                                 }
                             }
                         },
-                        { "data": "description", "title": "Description" }
+                        { "data": "description", "title": "Description" },
+                        { "defaultContent": "delete", "title": "Options",
+                            fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                                if(oData.name) {
+                                    $(nTd).html("<a href='#' onclick='editCol(\"" + oData.id + "\")'><i class='fas fa-edit'></i></a>" + "&nbsp;<a href='#' onclick='deleteCol(\"" + oData.id + "\")'><i class='fas fa-trash'></i></a>");
+                                }
+                            }
+                        }
                     ]
                 });
             }
