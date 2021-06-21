@@ -49,10 +49,16 @@ public class DataUploadController {
 
     }
 
+    @GetMapping("/getview")
+    public String getView(@RequestParam("viewname") String viewName) {
+        return uploadService.getDataView(viewName);
+    }
+
     @DeleteMapping
     public void deleteData(@RequestParam("tablename") String tablename){
          uploadService.deleteData(tablename);
     }
+
 
 
 }

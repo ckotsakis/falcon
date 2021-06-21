@@ -39,6 +39,12 @@ public class UploadService {
         return resultSet;
     }
 
+    public String getDataView(String viewName) {
+        String resultSet = "";
+        resultSet = dataDao.getDataView(viewName);
+        return resultSet;
+    }
+
     public void deleteData(String tableName){
         dataDao.deleteData(tableName);
     }

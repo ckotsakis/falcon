@@ -7,5 +7,8 @@ public interface DataDao {
 
     public String getData(String tableName);
 
+    public String getDataView(String dataView);
+
     public void deleteData(String tableName);
+
 }

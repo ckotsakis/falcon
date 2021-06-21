@@ -4,10 +4,7 @@ import com.worklogix.falcon.dao.SnippetDao;
 import com.worklogix.falcon.service.ISnippetService;
 import com.worklogix.falcon.service.SnippetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -23,14 +20,21 @@ public class SnippetController implements ISnippetService {
     }
 
     @PostMapping
-    public void createSnippet(String snippetName, String snippetDescription, String language, String category, String code) throws IOException {
-       snippetService.createSnippet(snippetName, snippetDescription, language, category, code);
+    public void createSnippet(String snippetName, String snippetDescription, String language, String category, String framework, String code) throws IOException {
+       snippetService.createSnippet(snippetName, snippetDescription, language, category, framework, code);
     }
+
+    @PostMapping("/updatesnippet")
+    public int updateSnippet(@RequestParam("id") String id, @RequestParam("code") String code) {return snippetService.updateSnippet(id, code);}
 
     @GetMapping
     public String getSnippets(){
         return snippetService.getSnippets();
     }
+
+    @GetMapping("/data")
+    public String getSnippet(@RequestParam("id") String id) {return snippetService.getSnippet(id);}
+
 
 
 }

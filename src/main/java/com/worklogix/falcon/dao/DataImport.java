@@ -1,5 +1,6 @@
 package com.worklogix.falcon.dao;
 
+import org.bson.json.JsonReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -127,10 +128,82 @@ public class DataImport implements DataDao {
     }
 
     @Override
+    public String getDataView(String viewName) {
+
+        //First lets get the view that was requested.  Once we have the view then let's figure out the source, run the query and get the data
+
+        String resultset = "";
+        String tablename = "";
+
+        StringBuilder items = new StringBuilder();
+
+        MongoClient mongoClient = MongoClients.create(database);
+        MongoDatabase database = mongoClient.getDatabase("views");
+        //use the ID to find the table name
+        MongoCollection<Document> projects = database.getCollection("views");
+        Document viewdoc = projects.find().first();
+
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject obj = (JSONObject) jsonParser.parse(viewdoc.toJson());
+            // Get the datasource
+            String datasource = (String) obj.get("datasource");
+            // Get all the elements and functions we want
+            JSONArray elements = (JSONArray) obj.get("elements");
+            JSONArray functions = (JSONArray) obj.get("functions");
+
+            // Go read the datasource and run the query
+            database = mongoClient.getDatabase("staging");
+            //use the ID to find the table name
+            MongoCollection<Document> entity = database.getCollection(datasource);
+            MongoCursor<Document> data = entity.find().iterator();
+
+            // Now we need to build the response we want back
+
+            while (data.hasNext()) {
+                String str = data.next().toJson();
+
+                //str = str.replace("{\"$oid\":","");
+                //str = str.replace("},",",");
+
+                items.append(str);
+                if (data.hasNext()) {
+                    items.append(",");
+                }
+            }
+
+            /*
+            System.out.println(elements.size());
+
+            Iterator objIter = elements.iterator();
+            while (objIter.hasNext()) {
+                JSONObject jso = (JSONObject) objIter.next();
+                String str = (String) jso.get("element");
+                resultset += " | " + str;
+            }
+
+             */
+
+
+
+
+            System.out.println(items);
+
+        } catch (ParseException parseException) {
+            System.out.println(parseException.getMessage());
+        }
+
+        mongoClient.close();
+
+        return resultset;
+    }
+
+    @Override
     public void deleteData(String tableName) {
         MongoClient mongoClient = MongoClients.create(database);
         MongoDatabase database = mongoClient.getDatabase("staging");
         MongoCollection<Document> collection = database.getCollection(tableName);
+
 
         collection.drop();
         mongoClient.close();

@@ -121,23 +121,7 @@
 
 
           <table class='table table-striped' id='snippets'>
-            <thead>
-              <tr>
-                <th>Snippet Name</th>
-                <th>Description</th>
-                <th>Language</th>
-                <th>Category</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><a href="snippet.html">Database Insert</a></td>
-                <td>This is a sample snippet that we have added to the system.</td>
-                <td>Java</td>
-                <td>Database</td>
-              </tr>
-              
-            </tbody>
+
           </table>
 
 
@@ -218,7 +202,9 @@
               columns.push({data: "name", title: "Snippet"});
               columns.push({data: "description", title: "Description"});
               columns.push({data: "language", title: "Language"});
+              columns.push({data: "framework", title: "Framework"});
               columns.push({data: "category", title: "Category"});
+
 
               let table = $('#snippets').DataTable({
                 data: result,
@@ -233,7 +219,9 @@
                   },
                   {"data": "description", "title": "Description"},
                   {"data": "language", "title": "Language"},
+                  {"data": "framework", "title": "Framework"},
                   {"data": "category", "title": "Category"}
+
                 ]
               });
             }

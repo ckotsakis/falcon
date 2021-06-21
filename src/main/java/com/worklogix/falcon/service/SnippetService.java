@@ -18,12 +18,22 @@ public class SnippetService implements ISnippetService {
     }
 
     @Override
-    public void createSnippet(String snippetName, String snippetDescription, String language, String category, String code) throws IOException {
-        snippetDao.createSnippet(snippetName,snippetDescription,language, category, code);
+    public void createSnippet(String snippetName, String snippetDescription, String language, String category, String framework, String code) throws IOException {
+        snippetDao.createSnippet(snippetName,snippetDescription,language, category, framework, code);
+    }
+
+    @Override
+    public int updateSnippet(String id, String code) {
+        return snippetDao.updateSnippet(id, code);
     }
 
     public String getSnippets(){
         return snippetDao.getSnippets();
     }
+
+    public String getSnippet(String id){
+        return snippetDao.getSnippet(id);
+    }
+
 
 }

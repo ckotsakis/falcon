@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>HTML Accelerators - Code Snippets</title>
+
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 
@@ -108,12 +109,14 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h4">Title of the Snippet</h1>
+            <h1 class="h4" id="title"></h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" id="copyclip" class="btn btn-sm btn-primary" data-clipboard-target="#codesnippet">COPY</button>
-                 <button type="button" class="btn btn-sm btn-outline-secondary" id="clearclip" class="btn btn-sm btn-primary" onclick="clearEditor()">CLEAR</button>
-                 <button type="button" class="btn btn-sm btn-outline-secondary" id="clearclip" class="btn btn-sm btn-primary" onclick="window.location.href='library.html';">BACK</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="saveclip" class="btn btn-sm btn-primary" onclick="saveEditor()">SAVE <i class="fa fa-check" style="display:none" id="saveicon"></i></button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="procclip" class="btn btn-sm btn-primary" onclick="collectFields()">PROCESS</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="clearclip" class="btn btn-sm btn-primary" onclick="clearEditor()">CLEAR</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="back" class="btn btn-sm btn-primary" onclick="window.location.href='library.html';">BACK</button>
               </div>
             </div>
           </div>
@@ -124,6 +127,8 @@
 
           <div class="row">
             <div class="col-lg">
+              <div id="datainput" style="margin-bottom: 20px">
+              </div>
               <textarea id="codesnippet" class="editor"></textarea>  
             </div>
           </div>
@@ -195,7 +200,6 @@
         }
 
         function loadSnippetTest() {
-
           var snippet = "samle stuff"
           editor.setValue(snippet);
         }
@@ -204,16 +208,44 @@
         function loadSnippet() {
 
           jQuery.ajax({
-            url: '/snippet',
+            url: '/snippet/data',
+            data: {"id": getUrlParam('id','Empty')},
+            contentType: "json",
+            method: 'GET',
+            success: function(data){
+
+              let json = JSON.parse(data);
+              $("#title").html(json[0].name);
+              editor.setValue(decodeURIComponent(json[0].code));
+
+              //alert(json[0].name);
+            }
+          });
+
+        }
+
+        function saveEditor() {
+
+          let data = new FormData();
+          data.append("id", getUrlParam('id','Empty'));
+          data.append("code",encodeURIComponent(editor.getValue()));
+
+          jQuery.ajax({
+            url: '/snippet/updatesnippet',
+            data: data,
             cache: false,
             contentType: false,
             processData: false,
-            method: 'GET',
+            method: 'POST',
             success: function(data){
-              var json = JSON.parse(data);
-              editor.setValue(json.code);
+              // navigate back to collections
+              //let proj = getUrlParam('project','Empty');
+              //window.location.href="library.html";
+
+              $("#saveicon").attr("style","");
             }
           });
+
 
         }
 
@@ -240,22 +272,88 @@
           //var mytext = getUrlParam('text','Empty');
 
         }
-   
+
+        function collectFields() {
+
+          var data = editor.getValue();
+
+          //var pos = data.search("#!");
+
+          //let pos = data.indexOf("#!");
+          //let npos = data.indexOf("!#",pos+2);
+          //alert(data.substring(0,npos+2));
+
+          let formobj = document.getElementById("datainput");
+          let text = "";
+
+          let arr = data.match(/#!(.*?)!#/g);
+
+          for (let x = 0; x < arr.length; x++) {
+            text = arr[x].substring(2,arr[x].length-2);
+
+            //Create fields for input
+
+            let obj = document.createElement("div");
+            obj.className = "form-group";
+
+            let label = document.createElement("label");
+            label.setAttribute("for", text);
+            label.appendChild(document.createTextNode(text));
+
+            let input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.setAttribute("class", "form-control");
+            input.setAttribute("id", text.replace(' ','_'));
+
+            obj.appendChild(label);
+            obj.appendChild(input);
+
+            formobj.appendChild(obj);
+
+          }
+
+          //Let's add a button that can process the fields we just added and replace the text.
+          if (arr.length > 0) {
+
+            let btn = document.createElement("button");
+            btn.className = "btn btn-sm btn-primary";
+            btn.setAttribute("onclick", "generateCode()");
+            btn.appendChild(document.createTextNode("Generate"));
+            formobj.appendChild(btn);
+
+          }
+        }
+
+
+        function generateCode() {
+
+          let arr = document.getElementsByTagName("input");
+          let id = "";
+          let subtext = "";
+
+          //console.log(arr[0].id);
+
+          for (let x = 0;x < arr.length; x++) {
+            //Strip off the underscore
+            id = arr[x].id
+            id = id.replace('_',' ');
+            //Add the container characters
+            id = "#!" + id + "!#";
+            console.log(id);
+
+            snippet = editor.getValue();
+            subtext = $("#"+arr[x].id).val();
+
+            snippet = snippet.replace(id,subtext);
+
+            editor.setValue(snippet);
+
+          }
+
+        }
 
 
 
-   
-
-
-
- 
-
-
-
-  
-
-
-  
 
 
 
@@ -281,11 +379,25 @@
 
 
 
-      
 
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 
 
